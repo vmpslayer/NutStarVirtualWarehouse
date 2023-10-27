@@ -1,0 +1,32 @@
+﻿<Properties StartupConfiguration="{7E9CFBB7-C289-45F4-A38D-8D369C5201AC}|Default">
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Team-308-VirtualWarehouse/Form1.cs">
+    <Files>
+      <File FileName="Team-308-VirtualWarehouse/Program.cs" Line="27" Column="1" />
+      <File FileName="Team-308-VirtualWarehouse/Form1.cs" Line="140" Column="97" />
+      <File FileName="Team-308-VirtualWarehouse/MQTTConnection.cs" />
+      <File FileName="Team-308-VirtualWarehouse/App.config" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="Team-308-VirtualWarehouse" expanded="True">
+            <Node name="Team-308-VirtualWarehouse" expanded="True">
+              <Node name="Properties" expanded="True" />
+              <Node name="Form1.cs" selected="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State />
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.Team-308-VirtualWarehouse PreferredExecutionTarget="MonoDevelop.Default" />
+</Properties>
