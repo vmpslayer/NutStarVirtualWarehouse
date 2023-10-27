@@ -1,0 +1,17 @@
+/Users/misa/CSE120Projects/VirtualWarehouse/Team-308-VirtualWarehouse/Team-308-VirtualWarehouse/Team-308-VirtualWarehouse/obj/Debug/Team-308-VirtualWarehouse.csproj.AssemblyReference.cache
+/Users/misa/CSE120Projects/VirtualWarehouse/Team-308-VirtualWarehouse/Team-308-VirtualWarehouse/Team-308-VirtualWarehouse/obj/Debug/Team_308_VirtualWarehouse.Form1.resources
+/Users/misa/CSE120Projects/VirtualWarehouse/Team-308-VirtualWarehouse/Team-308-VirtualWarehouse/Team-308-VirtualWarehouse/obj/Debug/Team_308_VirtualWarehouse.Properties.Resources.resources
+/Users/misa/CSE120Projects/VirtualWarehouse/Team-308-VirtualWarehouse/Team-308-VirtualWarehouse/Team-308-VirtualWarehouse/obj/Debug/Team-308-VirtualWarehouse.csproj.GenerateResource.cache
+/Users/misa/CSE120Projects/VirtualWarehouse/Team-308-VirtualWarehouse/Team-308-VirtualWarehouse/Team-308-VirtualWarehouse/obj/Debug/Team-308-VirtualWarehouse.csproj.CoreCompileInputs.cache
+/Users/misa/CSE120Projects/VirtualWarehouse/Team-308-VirtualWarehouse/Team-308-VirtualWarehouse/Team-308-VirtualWarehouse/bin/Debug/Team-308-VirtualWarehouse.exe.config
+/Users/misa/CSE120Projects/VirtualWarehouse/Team-308-VirtualWarehouse/Team-308-VirtualWarehouse/Team-308-VirtualWarehouse/bin/Debug/Team-308-VirtualWarehouse.exe
+/Users/misa/CSE120Projects/VirtualWarehouse/Team-308-VirtualWarehouse/Team-308-VirtualWarehouse/Team-308-VirtualWarehouse/bin/Debug/Team-308-VirtualWarehouse.pdb
+/Users/misa/CSE120Projects/VirtualWarehouse/Team-308-VirtualWarehouse/Team-308-VirtualWarehouse/Team-308-VirtualWarehouse/bin/Debug/MQTTnet.dll
+/Users/misa/CSE120Projects/VirtualWarehouse/Team-308-VirtualWarehouse/Team-308-VirtualWarehouse/Team-308-VirtualWarehouse/bin/Debug/MQTTnet.Extensions.ManagedClient.dll
+/Users/misa/CSE120Projects/VirtualWarehouse/Team-308-VirtualWarehouse/Team-308-VirtualWarehouse/Team-308-VirtualWarehouse/bin/Debug/Newtonsoft.Json.dll
+/Users/misa/CSE120Projects/VirtualWarehouse/Team-308-VirtualWarehouse/Team-308-VirtualWarehouse/Team-308-VirtualWarehouse/bin/Debug/MQTTnet.xml
+/Users/misa/CSE120Projects/VirtualWarehouse/Team-308-VirtualWarehouse/Team-308-VirtualWarehouse/Team-308-VirtualWarehouse/bin/Debug/MQTTnet.Extensions.ManagedClient.xml
+/Users/misa/CSE120Projects/VirtualWarehouse/Team-308-VirtualWarehouse/Team-308-VirtualWarehouse/Team-308-VirtualWarehouse/bin/Debug/Newtonsoft.Json.xml
+/Users/misa/CSE120Projects/VirtualWarehouse/Team-308-VirtualWarehouse/Team-308-VirtualWarehouse/Team-308-VirtualWarehouse/obj/Debug/Team-308-VirtualWarehouse.csproj.CopyComplete
+/Users/misa/CSE120Projects/VirtualWarehouse/Team-308-VirtualWarehouse/Team-308-VirtualWarehouse/Team-308-VirtualWarehouse/obj/Debug/Team-308-VirtualWarehouse.exe
+/Users/misa/CSE120Projects/VirtualWarehouse/Team-308-VirtualWarehouse/Team-308-VirtualWarehouse/Team-308-VirtualWarehouse/obj/Debug/Team-308-VirtualWarehouse.pdb
