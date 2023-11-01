@@ -15,3 +15,12 @@
 /Users/misa/CSE120Projects/VirtualWarehouse/Team-308-VirtualWarehouse/Team-308-VirtualWarehouse/Team-308-VirtualWarehouse/obj/Debug/Team-308-VirtualWarehouse.csproj.CopyComplete
 /Users/misa/CSE120Projects/VirtualWarehouse/Team-308-VirtualWarehouse/Team-308-VirtualWarehouse/Team-308-VirtualWarehouse/obj/Debug/Team-308-VirtualWarehouse.exe
 /Users/misa/CSE120Projects/VirtualWarehouse/Team-308-VirtualWarehouse/Team-308-VirtualWarehouse/Team-308-VirtualWarehouse/obj/Debug/Team-308-VirtualWarehouse.pdb
+C:\Users\Coco\Source\Repos\Team311NutStarVirtualWarehouse\Team-308-VirtualWarehouse\obj\Debug\Team-308-VirtualWarehouse.csproj.AssemblyReference.cache
+C:\Users\Coco\Source\Repos\Team311NutStarVirtualWarehouse\Team-308-VirtualWarehouse\obj\Debug\Team-308-VirtualWarehouse.csproj.SuggestedBindingRedirects.cache
+C:\Users\Coco\Source\Repos\Team311NutStarVirtualWarehouse\Team-308-VirtualWarehouse\obj\Debug\Team-308-VirtualWarehouse.exe.config
+C:\Users\Coco\Source\Repos\Team311NutStarVirtualWarehouse\Team-308-VirtualWarehouse\obj\Debug\Team_308_VirtualWarehouse.Form1.resources
+C:\Users\Coco\Source\Repos\Team311NutStarVirtualWarehouse\Team-308-VirtualWarehouse\obj\Debug\Team_308_VirtualWarehouse.Properties.Resources.resources
+C:\Users\Coco\Source\Repos\Team311NutStarVirtualWarehouse\Team-308-VirtualWarehouse\obj\Debug\Team-308-VirtualWarehouse.csproj.GenerateResource.cache
+C:\Users\Coco\Source\Repos\Team311NutStarVirtualWarehouse\Team-308-VirtualWarehouse\obj\Debug\Team-308-VirtualWarehouse.csproj.CoreCompileInputs.cache
+C:\Users\Coco\Source\Repos\Team311NutStarVirtualWarehouse\Team-308-VirtualWarehouse\obj\Debug\Team-308-VirtualWarehouse.exe
+C:\Users\Coco\Source\Repos\Team311NutStarVirtualWarehouse\Team-308-VirtualWarehouse\obj\Debug\Team-308-VirtualWarehouse.pdb

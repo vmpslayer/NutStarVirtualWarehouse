@@ -21,6 +21,32 @@ namespace Team_308_VirtualWarehouse
             InitializeComponent();
         }
 
+        private string CategorizeElevation(double elevationData) // Not Complete
+        {   // Need to find bounds of elevation, can only go so high
+            string categorization;
+            if (elevationData > 26)
+            {
+                throw new ArgumentOutOfRangeException(nameof(elevationData));
+            }
+            else 
+            // make a better implementation of abstract classes with their own variables
+            // to make a way to convert double into a char or string easy and cheap
+            {
+                if (elevationData > 0 && elevationData <= 2) categorization = "A";
+                else if (elevationData > 2 && elevationData <= 4) categorization = "B";
+                else if (elevationData > 4 && elevationData <= 6) categorization = "C";
+                else if (elevationData > 6 && elevationData <= 8) categorization = "D";
+                else if (elevationData > 8 && elevationData <= 10) categorization = "E";
+                else categorization = "F";
+            }
+            return categorization;
+        }
+
+        //private int NormalizeData(int data)
+        //{
+        //  
+        //}
+
         /// <summary>
         /// Test event handler for button
         /// </summary>
@@ -55,7 +81,8 @@ namespace Team_308_VirtualWarehouse
 
                 var response = await mqttClient.SubscribeAsync(mqttSubscribeOptions, CancellationToken.None);
 
-                this.BeginInvoke((MethodInvoker)delegate { this.textBox5.Text = "MQTT client subscribed."; });
+                //this.BeginInvoke((MethodInvoker)delegate { this.textBox5.Text = "MQTT client subscribed."; });
+                Console.Write("MQTT Client Subscribed.");
 
                 //response.DumpToConsole();
                 Dumper.Dump(response);
@@ -117,12 +144,13 @@ namespace Team_308_VirtualWarehouse
         /// <returns></returns>
         private Task handleReceivedApplicationMessage(MqttApplicationMessageReceivedEventArgs m)
         {
-            this.BeginInvoke((MethodInvoker)delegate { this.textBox6.Text = "Received application message"; });
+            //this.BeginInvoke((MethodInvoker)delegate { this.textBox6.Text = "Received application message"; });
+            Console.Write("Received Application Message");
 
             while (m != null)
             {
                 string payload = Encoding.UTF8.GetString(m.ApplicationMessage.Payload);
-                this.BeginInvoke((MethodInvoker)delegate { this.textBox4.Text = payload; });
+                //this.BeginInvoke((MethodInvoker)delegate { this.textBox4.Text = payload; });
                 string[] result = new string[3];
                 string[] result1 = new string[3];
                 result = parseApplicationMessage(payload);
@@ -137,11 +165,11 @@ namespace Team_308_VirtualWarehouse
 
                 CSVWriter.writeToCSV(new Payload() { Time = DateTime.Now, Row = x, Column = y, Loft = z});
 
-                double temp1 = double.Parse(azimuth, CultureInfo.InvariantCulture.NumberFormat);
-                double temp2 = double.Parse(elevation, CultureInfo.InvariantCulture.NumberFormat);
+                double azimuthData = double.Parse(azimuth, CultureInfo.InvariantCulture.NumberFormat);
+                double elevationData = double.Parse(elevation, CultureInfo.InvariantCulture.NumberFormat);
 
-                this.BeginInvoke((MethodInvoker)delegate { this.textBox5.Text = x; });
-                this.BeginInvoke((MethodInvoker)delegate { this.textBox6.Text = y; });
+                //this.BeginInvoke((MethodInvoker)delegate { this.textBox5.Text = x; });
+                //this.BeginInvoke((MethodInvoker)delegate { this.textBox6.Text = y; });
                 float x1 = 1;
                 float y1 = 1;
 
@@ -162,11 +190,12 @@ namespace Team_308_VirtualWarehouse
                 //temp1 = (temp1 - 1.5) / 2;
                 //temp2 = (temp2 - 33);
 
+                // We want to replace azimuth with raw x, y, z values. (x, y) to be exact, z will be implemented later for use (or we can use elevation)
 
-                Console.WriteLine(payload + " //// " + azimuth + " //// " + elevation + " //// " + distance);
-                this.BeginInvoke((MethodInvoker)delegate { this.textBox1.Text = temp1.ToString(); });
-                this.BeginInvoke((MethodInvoker)delegate { this.textBox2.Text = temp2.ToString(); });
-                this.BeginInvoke((MethodInvoker)delegate { this.textBox3.Text = distance; });
+                Console.WriteLine(payload + " //// " + x + " //// " + y + " //// " + z);
+                this.BeginInvoke((MethodInvoker)delegate { this.textBox1.Text = x.ToString(); });
+                this.BeginInvoke((MethodInvoker)delegate { this.textBox2.Text = y.ToString(); });
+                this.BeginInvoke((MethodInvoker)delegate { this.textBox3.Text = CategorizeElevation(elevationData); });
                 return Task.CompletedTask;
             }
             return Task.CompletedTask;
