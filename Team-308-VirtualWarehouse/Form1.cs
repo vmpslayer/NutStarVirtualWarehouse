@@ -11,67 +11,47 @@ using System.Windows.Forms;
 using MQTTnet;
 using MQTTnet.Client;
 using System.Globalization;
+using System.Drawing.Drawing2D;
+using CsvHelper;
+using static System.Net.Mime.MediaTypeNames;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Team_308_VirtualWarehouse
-{
+{   
     public partial class Form1 : Form
     {
         public Form1()
         {
             InitializeComponent();
+            this.Paint += new PaintEventHandler(set_background);
         }
+        
 
-        private string CategorizeElevation(double elevationData) // Not Complete
-        {   // Need to find bounds of elevation, can only go so high
-            string categorization;
-            if (elevationData > 26)
-            {
-                throw new ArgumentOutOfRangeException(nameof(elevationData));
-            }
-            else 
-            // make a better implementation of abstract classes with their own variables
-            // to make a way to convert double into a char or string easy and cheap
-            {
-                if (elevationData > 0 && elevationData <= 2) categorization = "A";
-                else if (elevationData > 2 && elevationData <= 4) categorization = "B";
-                else if (elevationData > 4 && elevationData <= 6) categorization = "C";
-                else if (elevationData > 6 && elevationData <= 8) categorization = "D";
-                else if (elevationData > 8 && elevationData <= 10) categorization = "E";
-                else categorization = "F";
-            }
-            return categorization;
-        }
-
-        //private int NormalizeData(int data)
-        //{
-        //  
-        //}
-
-        /// <summary>
-        /// Test event handler for button
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void ButtonChangeTextOnClick(object sender, EventArgs e)
-        {
-            getData();
-        }
+        //this function establishes a connection to an MQTT server,
+        //subscribes to a specified MQTT topic, and listens for incoming messages
         private async void getData()
         {
             Console.WriteLine("Connecting...");
+            
+            //MqttFactory() is used to create a MqttClient instance
             var mqttFactory = new MqttFactory();
-
             using (var mqttClient = mqttFactory.CreateMqttClient())
             {
+                //The MqttClientOptionsBuilder is used to create an MqttClientOptions object
+                //that specifies the MQTT SERVER and PORT to connect to
                 var mqttClientOptions = new MqttClientOptionsBuilder()
                     .WithTcpServer(MqttConfig.Server, MqttConfig.Port)
                     //.WithCredentials(MqttConfig.User, MqttConfig.Password)
                     .Build();
 
+                //handleReceivedApplicationMessage function is subscribed to the mqttClient's ApplicationMessageReceivedAsync event
+                //whenever an MQTT message is received, the handleReceivedApplicationMessage function will be called to handle it
                 mqttClient.ApplicationMessageReceivedAsync += this.handleReceivedApplicationMessage;
 
+                //establish a connection to the MQTT server
                 await mqttClient.ConnectAsync(mqttClientOptions, CancellationToken.None);
 
+                //create an MqttSubscribeOptions object that specifies the MQTT TOPIC to subscribe to
                 var mqttSubscribeOptions = mqttFactory.CreateSubscribeOptionsBuilder()
                     .WithTopicFilter(f =>
                     {
@@ -79,10 +59,10 @@ namespace Team_308_VirtualWarehouse
                     })
                 .Build();
 
+                //The mqttClient.SubscribeAsync() method is used to SUBSCRIBE to the specified MQTT TOPIC
                 var response = await mqttClient.SubscribeAsync(mqttSubscribeOptions, CancellationToken.None);
 
-                //this.BeginInvoke((MethodInvoker)delegate { this.textBox5.Text = "MQTT client subscribed."; });
-                Console.Write("MQTT Client Subscribed.");
+               // this.BeginInvoke((MethodInvoker)delegate { this.textBox2.Text = "MQTT client subscribed."; });
 
                 //response.DumpToConsole();
                 Dumper.Dump(response);
@@ -90,7 +70,8 @@ namespace Team_308_VirtualWarehouse
             }
         }
 
-
+        // get angle values from data
+        // azimuth, elevation, distance
         private string[] parseApplicationMessage(string payload)
         {
             string[] result = new string[3];
@@ -114,6 +95,8 @@ namespace Team_308_VirtualWarehouse
             return result;
         }
 
+        // get position values from data
+        // x,y,z
         private string[] parsesApplicationMessage(string payload)
         {
             string[] result = new string[3];
@@ -137,20 +120,33 @@ namespace Team_308_VirtualWarehouse
             return result;
         }
 
-        /// <summary>
-        /// Handles the received application message
-        /// </summary>
-        /// <param name="m"></param>
-        /// <returns></returns>
+        //When the application receives a message from the MQTT broker, this function is executed
+
+       /* When the button is clicked, it starts the application.
+        It receives messages from the MQTT broker and prints the received message in the textbox.
+
+        The function parses the received message to get the values of azimuth, elevation, and distance.
+
+        It then calls the parsesApplicationMessage method to get the values of x, y, and z.
+        
+        It writes these values to a CSV file using the CSVWriter class.
+        
+        Finally, it updates the text of textbox1, textbox2, and textbox3 with the
+        
+        values of azimuth, elevation, distance, x, y, and z respectively.*/
         private Task handleReceivedApplicationMessage(MqttApplicationMessageReceivedEventArgs m)
         {
-            //this.BeginInvoke((MethodInvoker)delegate { this.textBox6.Text = "Received application message"; });
-            Console.Write("Received Application Message");
-
+            // simply sets Textbox3 to a new string value
+            this.BeginInvoke((MethodInvoker)delegate { this.Loft_TextBox.Text = "Received application message"; });
+            
+            // m is the message recieved from the server and locator
             while (m != null)
             {
+                // m.ApplicationMessage.Payload contains actual message sent by mqtt broker
+                /*This line of code converts the payload (a byte array) received from the MQTT broker into a
+                  readable string using UTF-8 encoding and stores the resulting string in the variable "payload"*/
                 string payload = Encoding.UTF8.GetString(m.ApplicationMessage.Payload);
-                //this.BeginInvoke((MethodInvoker)delegate { this.textBox4.Text = payload; });
+                this.BeginInvoke((MethodInvoker)delegate { this.X_TextBox.Text = payload; });
                 string[] result = new string[3];
                 string[] result1 = new string[3];
                 result = parseApplicationMessage(payload);
@@ -165,11 +161,11 @@ namespace Team_308_VirtualWarehouse
 
                 CSVWriter.writeToCSV(new Payload() { Time = DateTime.Now, Row = x, Column = y, Loft = z});
 
-                double azimuthData = double.Parse(azimuth, CultureInfo.InvariantCulture.NumberFormat);
-                double elevationData = double.Parse(elevation, CultureInfo.InvariantCulture.NumberFormat);
+                double temp1 = double.Parse(azimuth, CultureInfo.InvariantCulture.NumberFormat);
+                double temp2 = double.Parse(elevation, CultureInfo.InvariantCulture.NumberFormat);
 
-                //this.BeginInvoke((MethodInvoker)delegate { this.textBox5.Text = x; });
-                //this.BeginInvoke((MethodInvoker)delegate { this.textBox6.Text = y; });
+                this.BeginInvoke((MethodInvoker)delegate { this.Y_TextBox.Text = x; });
+                this.BeginInvoke((MethodInvoker)delegate { this.Loft_TextBox.Text = y; });
                 float x1 = 1;
                 float y1 = 1;
 
@@ -190,15 +186,52 @@ namespace Team_308_VirtualWarehouse
                 //temp1 = (temp1 - 1.5) / 2;
                 //temp2 = (temp2 - 33);
 
-                // We want to replace azimuth with raw x, y, z values. (x, y) to be exact, z will be implemented later for use (or we can use elevation)
-
                 Console.WriteLine(payload + " //// " + x + " //// " + y + " //// " + z);
-                this.BeginInvoke((MethodInvoker)delegate { this.textBox1.Text = x.ToString(); });
-                this.BeginInvoke((MethodInvoker)delegate { this.textBox2.Text = y.ToString(); });
-                this.BeginInvoke((MethodInvoker)delegate { this.textBox3.Text = CategorizeElevation(elevationData); });
+                // CHANGE THIS BACK THIS IS ONLY FOR SCREENSHOT
+                this.BeginInvoke((MethodInvoker)delegate { this.X_TextBox.Text = temp1.ToString(); });
+                this.BeginInvoke((MethodInvoker)delegate { this.Y_TextBox.Text = temp2.ToString(); });
+                this.BeginInvoke((MethodInvoker)delegate { this.Loft_TextBox.Text = distance; });
                 return Task.CompletedTask;
             }
             return Task.CompletedTask;
+        }
+
+        private void ButtonChangeTextOnClick(object sender, EventArgs e)
+        {
+            getData();
+        }
+
+        private void set_background(Object sender, PaintEventArgs e)
+        {
+            Graphics graphics = e.Graphics;
+
+            //the rectangle, the same size as our Form
+            Rectangle gradient_rectangle = new Rectangle(0, 0, Width, Height);
+
+            //define gradient's properties
+            Brush b = new LinearGradientBrush(gradient_rectangle, Color.FromArgb(112, 224, 0), Color.FromArgb(0, 100, 0), 65f);
+
+            //apply gradient         
+            graphics.FillRectangle(b, gradient_rectangle);
+        }
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_Layout(object sender, LayoutEventArgs e)
+        {
+
         }
     }
 }
