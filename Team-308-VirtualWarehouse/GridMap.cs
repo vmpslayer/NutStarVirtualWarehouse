@@ -1,4 +1,6 @@
 ﻿using System;
+using System.drawing;
+using System
 namespace Team_308_VirtualWarehouse
 {
 	public class GridMap
@@ -9,6 +11,8 @@ namespace Team_308_VirtualWarehouse
 
         // The data structure that will hold the real-world coordinates of the center of each grid.
         private (int x, int y)[,] gridContents;
+
+        private Ellipse circle;
 
         public GridMap()
         {
@@ -26,6 +30,7 @@ namespace Team_308_VirtualWarehouse
                     gridContents[i, j] = (realWorldX, realWorldY);
                 }
             }
+            InitializeComponent();
         }
 
         // Method to set the content of a grid cell
@@ -47,12 +52,19 @@ namespace Team_308_VirtualWarehouse
             }
             return gridContents[x, y];
         }
+
+        public void SetCircle(int x, int y)
+        {
+            if(circle != NULL){
+                this->circle = null;
+                Ellipse circle = new Ellipse(50, 50, x, y);
+            }
+            else if (circleDraw == NULL){
+                Ellipse circle = new Ellipse(50, 50, x, y);
+            }
+        }
     }
 
-    public class GridContent
-    {
-        // Add properties to store information about what is in each grid.
-
-    }
 }
 
+    
