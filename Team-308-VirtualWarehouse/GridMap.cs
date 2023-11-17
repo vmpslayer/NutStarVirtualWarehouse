@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Drawing;
+using System.Windows.Forms;
 namespace Team_308_VirtualWarehouse
 {
 	public class GridMap
@@ -56,14 +58,24 @@ namespace Team_308_VirtualWarehouse
 
         public void SetCircle(int x, int y)
         {
-            if (circle != NULL)
-            {
-                this->circle = null;
-                Ellipse circle = new Ellipse(50, 50, x, y);
+            if(circle != NULL){
+                brush.Dispose();
+                r.Dispose();
+                gr.Dispose();
+
+                SetCircle(e, x, y);
             }
-            else if (circleDraw == NULL)
-            {
-                Ellipse circle = new Ellipse(50, 50, x, y);
+            else{
+                // System.Drawing.Drawing2D.GraphicsPath map = new System.Drawing.Drawing2D.GraphicsPath();
+                // map.AddEllipse(100, 15, 100, 70);
+                // System.Drawing.Region r = new System.Drawing.Region(map);
+                // Graphics gr = e.Graphics;
+                // gr.FillRegion(Brushes.Red, r);
+
+                base.OnPaint(e)
+                using var myPen = new Pen(Color.Red);
+                var area = new Rectangle(new Point(x, y), new Size(1, 1))
+                e.Graphics.DrawRectangle(myPen, area);
             }
         }
 
@@ -97,4 +109,3 @@ namespace Team_308_VirtualWarehouse
     }
 
 }
-
