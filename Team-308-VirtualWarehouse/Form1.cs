@@ -15,15 +15,15 @@ using System.Drawing.Drawing2D;
 using CsvHelper;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Reflection.Emit;
 
 namespace Team_308_VirtualWarehouse
-{   
+{   // THIS IS A TEST COMMENT
     public partial class Form1 : Form
     {
         public Form1()
         {
             InitializeComponent();
-            this.Paint += new PaintEventHandler(set_background);
         }
         
 
@@ -201,37 +201,20 @@ namespace Team_308_VirtualWarehouse
             getData();
         }
 
-        private void set_background(Object sender, PaintEventArgs e)
+        private void X_Label_Paint(object sender, PaintEventArgs e)
         {
-            Graphics graphics = e.Graphics;
-
-            //the rectangle, the same size as our Form
-            Rectangle gradient_rectangle = new Rectangle(0, 0, Width, Height);
-
-            //define gradient's properties
-            Brush b = new LinearGradientBrush(gradient_rectangle, Color.FromArgb(112, 224, 0), Color.FromArgb(0, 100, 0), 65f);
-
-            //apply gradient         
-            graphics.FillRectangle(b, gradient_rectangle);
-        }
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
+            ControlPaint.DrawBorder(e.Graphics, X_Label.ClientRectangle,
+                Color.Red, ButtonBorderStyle.Solid);
         }
 
-        private void label1_Click(object sender, EventArgs e)
+        public (string x, string y) GetCoordinates()
         {
+            if (result1 == null || result1.Length < 2)
+            {
+                throw new InvalidOperationException("Coordinates not initialized or invalid.");
+            }
 
-        }
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox1_Layout(object sender, LayoutEventArgs e)
-        {
-
+            return (result1[0], result1[1]);
         }
     }
 }
