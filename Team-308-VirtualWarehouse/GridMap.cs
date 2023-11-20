@@ -1,21 +1,33 @@
 ﻿using System;
-using System.Drawing;
-using System.Windows.Forms;
+using System.Collections.Generic;
+
 namespace Team_308_VirtualWarehouse
 {
 	public class GridMap
 	{
         // Fixed grid dimensions
         private const int gridSize = 5;
+        private const int width = gridSize;
+        private const int height = gridSize;
         private const int gridScale = 2; // Each grid is 2x2 feet
 
         private Ellipse circle;
 
         // The data structure that will hold the real-world coordinates of the center of each grid.
         private (int x, int y)[,] gridContents;
+        // grid name such as: 101, 102 is stored in here with corresponding index i and j
+        private string[,] gridNames;
+        private string resultGridName;
         // variable to set origin coordinatest
         private (int x, int y) origin;
         private (int x, int y) currentCoordinates;
+        double normalizedX, normalizedY;
+
+        bool originisSet;
+
+        private const int MaxCoordinates = 10;
+        // average data container
+        private List<(int x, int y)> coordinatesBuffer = new List<(int x, int y)>();
 
 
         public GridMap()
@@ -29,31 +41,39 @@ namespace Team_308_VirtualWarehouse
                 for (int j = 0; j < gridSize; j++)
                 {
                     // Calculate the real-world coordinates for the center of each grid cell.
+                    // map is initialized from bottom left with 2*2 boundry input into each grid
+                    // realWorldX and realWorldY are the maximum boundry limit in x and y axis
                     int realWorldX = (i * gridScale) + gridScale;
                     int realWorldY = (j * gridScale) + gridScale;
                     gridContents[i, j] = (realWorldX, realWorldY);
+
+                    // Initialize grid names
+                    // ex: [0, 1] = 102
+                    gridNames[i, j] = $"{i + 1}{j + 1:D2}";
                 }
             }
+
+            originisSet = False;
         }  
 
         // example set
-        public void SetGridContent(int x, int y)
-        {
-            if (x < 0 || x >= width || y < 0 || y >= height)
-            {
-                throw new ArgumentOutOfRangeException("Coordinates are out of range.");
-            }
-            gridContents[i, j] = (x, y);
-        }
+        // public void SetGridContent(int x, int y)
+        // {
+        //     if (x < 0 || x >= width || y < 0 || y >= height)
+        //     {
+        //         throw new ArgumentOutOfRangeException("Coordinates are out of range.");
+        //     }
+        //     gridContents[i, j] = (x, y);
+        // }
 
         // example get
-        public GridContent GetGridContent(int x, int y)
+        public (int, int) GetGridContent(int i, int i)
         {
-            if (x < 0 || x >= width || y < 0 || y >= height)
+            if (i < 0 || i >= width || j < 0 || j >= height)
             {
                 throw new ArgumentOutOfRangeException("Coordinates are out of range.");
             }
-            return gridContents[x, y];
+            return gridContents[i, j];
         }
 
         public void SetCircle(int x, int y)
@@ -80,10 +100,40 @@ namespace Team_308_VirtualWarehouse
         }
 
         // overloading with parser
-        public GridContent GetCoordinates()
-        {
-            currentCoordinates = Form1.GetCoordinates();
-            Console.WriteLine($"X: {currentCoordinates.x}, Y: {currentCoordinates.y}");
+        public void GetCoordinates()
+        {   
+            for (int i = 0; i < MaxCoordinates; i++)
+            {
+                currentCoordinates = Form1.GetCoordinates();
+                // for testing
+                Console.WriteLine($"X: {currentCoordinates.x}, Y: {currentCoordinates.y}");
+
+                if (coordinatesBuffer.Count >= MaxCoordinates)
+                {
+                    coordinatesBuffer.RemoveAt(0); // Remove the oldest coordinate
+                }
+                coordinatesBuffer.Add(currentCoordinates);
+            }
+        }
+
+        private void normalizeData() {
+            if (coordinatesBuffer.Count == 0)
+            {
+                throw new InvalidOperationException("No coordinates data available to calculate average.");
+            }
+
+            double sumX = 0;
+            double sumY = 0;
+            foreach (var coord in coordinatesBuffer)
+            {
+                sumX += coord.x;
+                sumY += coord.y;
+            }
+
+            normalizedX = sumX / coordinatesBuffer.Count;
+            normalizedY = sumY / coordinatesBuffer.Count;
+
+            // return (normalizedX, normalizedY);
         }
 
         // Function to set the origin
@@ -91,6 +141,7 @@ namespace Team_308_VirtualWarehouse
         {
             // 'origin' holds the x, y, z values used for further calculations
             origin = Form1.GetCoordinates();
+            originisSet = True;
         }
 
         public void DisplayOrigin()
@@ -101,11 +152,46 @@ namespace Team_308_VirtualWarehouse
         // get current location difference than original location
         public (int x, int y) calculateLocationDifference()
         {
-            int diffX = currentCoordinates.x - origin.x;
-            int diffY = currentCoordinates.y - origin.y;
+            GetCoordinates();
+            normalizeData();
+
+            int diffX = normalizedX - origin.x;
+            int diffY = normalizedY - origin.y;
+
+            // TODO: ratio diffX and diffY to real world coordinate sensitivity
+
+
             return (diffX, diffY);
         }
 
+        public string calculateGrid(){
+            int diffX, diffY;
+
+            if (!originisSet) {
+                Console.WriteLine("Origin is not set, try again\n");
+                return "NULL";
+            }
+
+            diffX, diffY = calculateLocationDifference();
+            
+            for (int i = 0; i < gridSize; i++)
+            {
+                for (int j = 0; j < gridSize; j++)
+                {   
+                    // find the grid location based on first smallest boundry within
+                    if ((diffX, diffY) <= gridContents[i, j]) {
+                        // return grid name if found
+                        return gridNames[i, j];
+                    }
+                }
+            }
+
+            return "NULL";
+        }
+
+
+        public
     }
 
 }
+
