@@ -205,6 +205,8 @@ namespace Team_308_VirtualWarehouse
         {
             ControlPaint.DrawBorder(e.Graphics, X_Label.ClientRectangle,
                 Color.Red, ButtonBorderStyle.Solid);
+
+            // SetCircle(e.Graphics, x1, y1);
         }
     }
 }

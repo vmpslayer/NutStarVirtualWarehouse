@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace Team_308_VirtualWarehouse
 {
-	public class GridMap
-	{
+    public class GridMap : Form
+    {
         // Fixed grid dimensions
         private const int gridSize = 5;
         private const int width = gridSize;
         private const int height = gridSize;
         private const int gridScale = 2; // Each grid is 2x2 feet
 
-        private Ellipse circle;
+        Brush brush = new SolidBrush(Color.Red);
 
         // The data structure that will hold the real-world coordinates of the center of each grid.
         private (int x, int y)[,] gridContents;
@@ -54,7 +56,7 @@ namespace Team_308_VirtualWarehouse
             }
 
             originisSet = False;
-        }  
+        }
 
         // example set
         // public void SetGridContent(int x, int y)
@@ -76,32 +78,46 @@ namespace Team_308_VirtualWarehouse
             return gridContents[i, j];
         }
 
-        public void SetCircle(int x, int y)
+        // calls setcircle, set to private if needed
+        public void CirclePaint(object sender, PaintEventArgs g, int x, int y)
         {
-            if(circle != NULL){
-                brush.Dispose();
-                r.Dispose();
-                gr.Dispose();
+            // IF: we decide to automatically paint when selected to open the grid, then we don't need this call function for the button (delete this function if so) 
+            SetCircle(g, x, y)
+        }
 
-                SetCircle(e, x, y);
+        // paint circle depending on x, y
+        public void SetCircle(Graphics g, int x, int y)
+        {
+            // NOTE: On use in Form1.cs, Do this:
+                // System.Drawing.Graphics formGraphics;
+                // formGraphics = this.CreateGraphics();
+            int radius = 10;
+
+            if (brush != NULL)
+            {
+                brush.Dispose();
+                SetCircle(g, x, y);
             }
-            else{
+            else
+            {   
+                // previous:
                 // System.Drawing.Drawing2D.GraphicsPath map = new System.Drawing.Drawing2D.GraphicsPath();
                 // map.AddEllipse(100, 15, 100, 70);
                 // System.Drawing.Region r = new System.Drawing.Region(map);
                 // Graphics gr = e.Graphics;
                 // gr.FillRegion(Brushes.Red, r);
 
-                base.OnPaint(e)
-                using var myPen = new Pen(Color.Red);
-                var area = new Rectangle(new Point(x, y), new Size(1, 1))
-                e.Graphics.DrawRectangle(myPen, area);
+                // base.OnPaint(e)
+                // using var myPen = new Pen(Color.Red);
+                // var area = new Rectangle(new Point(x, y), new Size(1, 1))
+                // e.Graphics.DrawRectangle(myPen, area);
+                g.FillEllipse(brush, new Rectangle(x, y, 2 * radius, 2 * radius));
             }
         }
 
         // overloading with parser
         public void GetCoordinates()
-        {   
+        {
             for (int i = 0; i < MaxCoordinates; i++)
             {
                 currentCoordinates = Form1.GetCoordinates();
@@ -116,7 +132,8 @@ namespace Team_308_VirtualWarehouse
             }
         }
 
-        private void normalizeData() {
+        private void normalizeData()
+        {
             if (coordinatesBuffer.Count == 0)
             {
                 throw new InvalidOperationException("No coordinates data available to calculate average.");
@@ -164,22 +181,25 @@ namespace Team_308_VirtualWarehouse
             return (diffX, diffY);
         }
 
-        public string calculateGrid(){
+        public string calculateGrid()
+        {
             int diffX, diffY;
 
-            if (!originisSet) {
+            if (!originisSet)
+            {
                 Console.WriteLine("Origin is not set, try again\n");
                 return "NULL";
             }
 
             diffX, diffY = calculateLocationDifference();
-            
+
             for (int i = 0; i < gridSize; i++)
             {
                 for (int j = 0; j < gridSize; j++)
-                {   
+                {
                     // find the grid location based on first smallest boundry within
-                    if ((diffX, diffY) <= gridContents[i, j]) {
+                    if ((diffX, diffY) <= gridContents[i, j])
+                    {
                         // return grid name if found
                         return gridNames[i, j];
                     }
