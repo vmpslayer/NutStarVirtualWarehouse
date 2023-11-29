@@ -21,6 +21,11 @@ namespace Team_308_VirtualWarehouse
 {   // THIS IS A TEST COMMENT
     public partial class Form1 : Form
     {
+        // FROM HANDLE FUNCTION
+        // Needs to be "global" variable for this class
+        // Needed for GetCoordinates()
+        int[] result = new int[3];
+        int[] result1 = new int[3];
         public Form1()
         {
             InitializeComponent();
@@ -206,10 +211,10 @@ namespace Team_308_VirtualWarehouse
             ControlPaint.DrawBorder(e.Graphics, X_Label.ClientRectangle,
                 Color.Red, ButtonBorderStyle.Solid);
 
-            SetCircle(e.Graphics, x1, y1);
+            // SetCircle(e.Graphics, x1, y1);
         }
 
-        public (string x, string y) GetCoordinates()
+        public (int x, int y) GetCoordinates()
         {
             if (result1 == null || result1.Length < 2)
             {

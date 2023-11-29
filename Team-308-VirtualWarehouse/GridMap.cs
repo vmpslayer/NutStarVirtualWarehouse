@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Windows.Forms;
 
 namespace Team_308_VirtualWarehouse
@@ -13,7 +14,6 @@ namespace Team_308_VirtualWarehouse
         private const int height = gridSize;
         private const int gridScale = 2; // Each grid is 2x2 feet
 
-        Brush brush = new SolidBrush(Color.Red);
 
         // The data structure that will hold the real-world coordinates of the center of each grid.
         private (int x, int y)[,] gridContents;
@@ -55,7 +55,7 @@ namespace Team_308_VirtualWarehouse
                 }
             }
 
-            originisSet = False;
+            originisSet = false;
         }
 
         // example set
@@ -69,7 +69,7 @@ namespace Team_308_VirtualWarehouse
         // }
 
         // example get
-        public (int, int) GetGridContent(int i, int i)
+        public (int, int) GetGridContent(int i, int j)
         {
             if (i < 0 || i >= width || j < 0 || j >= height)
             {
@@ -78,22 +78,16 @@ namespace Team_308_VirtualWarehouse
             return gridContents[i, j];
         }
 
-        // calls setcircle, set to private if needed
-        public void CirclePaint(object sender, PaintEventArgs g, int x, int y)
-        {
-            // IF: we decide to automatically paint when selected to open the grid, then we don't need this call function for the button (delete this function if so) 
-            SetCircle(g, x, y)
-        }
-
         // paint circle depending on x, y
         public void SetCircle(Graphics g, int x, int y)
         {
+            Brush brush = new SolidBrush(Color.Red);
             // NOTE: On use in Form1.cs, Do this:
-                // System.Drawing.Graphics formGraphics;
-                // formGraphics = this.CreateGraphics();
+            // System.Drawing.Graphics formGraphics;
+            // formGraphics = this.CreateGraphics();
             int radius = 10;
 
-            if (brush != NULL)
+            if (brush != null)
             {
                 brush.Dispose();
                 SetCircle(g, x, y);
@@ -118,12 +112,12 @@ namespace Team_308_VirtualWarehouse
         // overloading with parser
         public void GetCoordinates()
         {
+            Form1 formInstance = new Form1();
             for (int i = 0; i < MaxCoordinates; i++)
             {
-                currentCoordinates = Form1.GetCoordinates();
+                var currentCoordinates = formInstance.GetCoordinates();
                 // for testing
                 Console.WriteLine($"X: {currentCoordinates.x}, Y: {currentCoordinates.y}");
-
                 if (coordinatesBuffer.Count >= MaxCoordinates)
                 {
                     coordinatesBuffer.RemoveAt(0); // Remove the oldest coordinate
@@ -156,9 +150,10 @@ namespace Team_308_VirtualWarehouse
         // Function to set the origin
         public void setOrigin()
         {
+            Form1 formInstance = new Form1();
             // 'origin' holds the x, y, z values used for further calculations
-            origin = Form1.GetCoordinates();
-            originisSet = True;
+            var origin = formInstance.GetCoordinates();
+            originisSet = true;
         }
 
         public void DisplayOrigin()
@@ -172,8 +167,8 @@ namespace Team_308_VirtualWarehouse
             GetCoordinates();
             normalizeData();
 
-            int diffX = normalizedX - origin.x;
-            int diffY = normalizedY - origin.y;
+            int diffX = (int)normalizedX - origin.x;
+            int diffY = (int)normalizedY - origin.y;
 
             // TODO: ratio diffX and diffY to real world coordinate sensitivity
 
@@ -191,14 +186,14 @@ namespace Team_308_VirtualWarehouse
                 return "NULL";
             }
 
-            diffX, diffY = calculateLocationDifference();
+            (diffX, diffY) = calculateLocationDifference();
 
             for (int i = 0; i < gridSize; i++)
             {
                 for (int j = 0; j < gridSize; j++)
                 {
                     // find the grid location based on first smallest boundry within
-                    if ((diffX, diffY) <= gridContents[i, j])
+                    if (diffX <= gridContents[i, j].x && diffY <= gridContents[i, j].y)
                     {
                         // return grid name if found
                         return gridNames[i, j];
@@ -210,7 +205,6 @@ namespace Team_308_VirtualWarehouse
         }
 
 
-        public
     }
 
 }
