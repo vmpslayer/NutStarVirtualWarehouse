@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Globalization;
 using System.Windows.Forms;
+using System.Drawing.Drawing2D;
+// using Internal;
 
 namespace Team_308_VirtualWarehouse
 {
-    public class GridMap : Form
+    public partial class GridMap : Form
     {
         // Fixed grid dimensions
         private const int gridSize = 5;
@@ -14,6 +15,7 @@ namespace Team_308_VirtualWarehouse
         private const int height = gridSize;
         private const int gridScale = 2; // Each grid is 2x2 feet
 
+        Brush brush = new SolidBrush(Color.Red);
 
         // The data structure that will hold the real-world coordinates of the center of each grid.
         private (int x, int y)[,] gridContents;
@@ -31,9 +33,14 @@ namespace Team_308_VirtualWarehouse
         // average data container
         private List<(int x, int y)> coordinatesBuffer = new List<(int x, int y)>();
 
+        private Form1 formInstance;
 
-        public GridMap()
-        {
+
+        public GridMap(Form1 form)
+        {   
+            // ***** just added testing *****
+            this.formInstance = form;
+
             // Initialize the gridContents with the fixed size of 5x5.
             gridContents = new (int x, int y)[gridSize, gridSize];
 
@@ -81,7 +88,6 @@ namespace Team_308_VirtualWarehouse
         // paint circle depending on x, y
         public void SetCircle(Graphics g, int x, int y)
         {
-            Brush brush = new SolidBrush(Color.Red);
             // NOTE: On use in Form1.cs, Do this:
             // System.Drawing.Graphics formGraphics;
             // formGraphics = this.CreateGraphics();
@@ -93,7 +99,7 @@ namespace Team_308_VirtualWarehouse
                 SetCircle(g, x, y);
             }
             else
-            {   
+            {
                 // previous:
                 // System.Drawing.Drawing2D.GraphicsPath map = new System.Drawing.Drawing2D.GraphicsPath();
                 // map.AddEllipse(100, 15, 100, 70);
@@ -115,7 +121,7 @@ namespace Team_308_VirtualWarehouse
             Form1 formInstance = new Form1();
             for (int i = 0; i < MaxCoordinates; i++)
             {
-                var currentCoordinates = formInstance.GetCoordinates();
+                currentCoordinates = formInstance.GetCoordinates();
                 // for testing
                 Console.WriteLine($"X: {currentCoordinates.x}, Y: {currentCoordinates.y}");
                 if (coordinatesBuffer.Count >= MaxCoordinates)
@@ -150,9 +156,9 @@ namespace Team_308_VirtualWarehouse
         // Function to set the origin
         public void setOrigin()
         {
-            Form1 formInstance = new Form1();
+            // Form1 formInstance = new Form1();
             // 'origin' holds the x, y, z values used for further calculations
-            var origin = formInstance.GetCoordinates();
+            origin = formInstance.GetCoordinates();
             originisSet = true;
         }
 
@@ -183,7 +189,7 @@ namespace Team_308_VirtualWarehouse
             if (!originisSet)
             {
                 Console.WriteLine("Origin is not set, try again\n");
-                return "NULL";
+                return null;
             }
 
             (diffX, diffY) = calculateLocationDifference();
@@ -204,7 +210,62 @@ namespace Team_308_VirtualWarehouse
             return "NULL";
         }
 
+        public static void drawMap(Graphics g)
+        {
+            if (g != null)
+            {
+                g.Dispose();
+                drawMap(g);
+            }
+            else
+            {
+                int width = GridMap.width * gridScale;
+                int height = GridMap.height * gridScale;
 
+                Pen pen = new Pen(Color.Black);
+
+                //// Left Side
+                //PointF point1 = new PointF(0, height);
+                //PointF point2 = new PointF(0, 0);
+                //g.DrawLine(pen, point1, point2);
+
+                // Top
+                PointF point1 = new PointF(0, 0);
+                PointF point2 = new PointF(width, 0);
+                g.DrawLine(pen, point1, point2);
+
+                //// Right Side
+                //point1 = new (width, 0);
+                //point2 = new (width, height);
+                //g.DrawLine(pen, point1, point2);
+
+                // Bottom
+                point1 = new PointF(width, height);
+                point2 = new PointF(height, 0);
+                g.DrawLine(pen, point1, point2);
+
+
+
+                for (int i = 0; i < width; i++)
+                {
+                    for (int j = 0; j < height; j++)
+                    {
+                        if (i % GridMap.gridScale == 0 && j % GridMap.gridScale == 0)
+                        {
+                            point1 = new PointF(i, 0);
+                            point2 = new PointF(i, height);
+                            g.DrawLine(pen, point1, point2);
+
+                            point1 = new PointF(0, j);
+                            point2 = new PointF(width, j);
+                            g.DrawLine(pen, point1, point2);
+
+                        }
+                    }
+                }
+
+            }
+        }
     }
 
 }

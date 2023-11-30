@@ -38,7 +38,7 @@
             this.X_Label = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // button1
+            // location_button
             // 
             this.button1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(171)))), ((int)(((byte)(120)))), ((int)(((byte)(78)))));
@@ -47,12 +47,12 @@
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button1.Location = new System.Drawing.Point(230, 419);
             this.button1.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
-            this.button1.Name = "button1";
+            this.button1.Name = "location_button";
             this.button1.Size = new System.Drawing.Size(150, 43);
             this.button1.TabIndex = 7;
             this.button1.Text = "Get Location";
             this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.ButtonChangeTextOnClick);
+            this.button1.Click += new System.EventHandler(this.LocationButton_Click);
             // 
             // X_TextBox
             // 
@@ -65,7 +65,7 @@
             this.X_TextBox.Size = new System.Drawing.Size(196, 53);
             this.X_TextBox.TabIndex = 8;
             this.X_TextBox.Text = "14.68";
-            this.X_TextBox.Layout += new System.Windows.Forms.LayoutEventHandler(this.textBox1_Layout);
+            // this.X_TextBox.Layout += new System.Windows.Forms.LayoutEventHandler(this.textBox1_Layout);
             // 
             // Y_TextBox
             // 
@@ -122,7 +122,7 @@
             this.Loft_Label.TabIndex = 13;
             this.Loft_Label.Text = "Loft";
             this.Loft_Label.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.Loft_Label.Click += new System.EventHandler(this.label3_Click);
+            // this.Loft_Label.Click += new System.EventHandler(this.label3_Click);
             // 
             // X_Label
             // 
@@ -138,7 +138,7 @@
             this.X_Label.TabIndex = 10;
             this.X_Label.Text = "X";
             this.X_Label.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.X_Label.Click += new System.EventHandler(this.label1_Click);
+            // this.X_Label.Click += new System.EventHandler(this.label1_Click);
             // 
             // Form1
             // 
@@ -159,7 +159,7 @@
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            // this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -168,6 +168,7 @@
         #endregion
 
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button location_button;
         private System.Windows.Forms.TextBox Y_TextBox;
         private System.Windows.Forms.Label Y_Label;
         private System.Windows.Forms.TextBox Loft_TextBox;

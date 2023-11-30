@@ -16,28 +16,38 @@ using CsvHelper;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Reflection.Emit;
+using System.Collections.Specialized;
 
 namespace Team_308_VirtualWarehouse
-{   // THIS IS A TEST COMMENT
+{
     public partial class Form1 : Form
     {
-        // FROM HANDLE FUNCTION
-        // Needs to be "global" variable for this class
         // Needed for GetCoordinates()
-        int[] result = new int[3];
-        int[] result1 = new int[3];
+        string[] result = new string[3];
+        string[] result1 = new string[3];
+
+        static Graphics g = null;
+
+        // since form1 can be the only class object to be started with the application
+        // and gridmap relies on form1 to work, gridmap would be instantiated inside of form1
+        private GridMap gridmap;
+
+        private bool configured = false;
         public Form1()
-        {
+        {     
             InitializeComponent();
+
+            // ***** just added testing *****
+            gridmap = new GridMap(this);
         }
-        
+
 
         //this function establishes a connection to an MQTT server,
         //subscribes to a specified MQTT topic, and listens for incoming messages
         private async void getData()
         {
             Console.WriteLine("Connecting...");
-            
+
             //MqttFactory() is used to create a MqttClient instance
             var mqttFactory = new MqttFactory();
             using (var mqttClient = mqttFactory.CreateMqttClient())
@@ -67,12 +77,13 @@ namespace Team_308_VirtualWarehouse
                 //The mqttClient.SubscribeAsync() method is used to SUBSCRIBE to the specified MQTT TOPIC
                 var response = await mqttClient.SubscribeAsync(mqttSubscribeOptions, CancellationToken.None);
 
-               // this.BeginInvoke((MethodInvoker)delegate { this.textBox2.Text = "MQTT client subscribed."; });
+                this.BeginInvoke((MethodInvoker)delegate { this.Loft_TextBox.Text = "MQTT client subscribed."; });
 
                 //response.DumpToConsole();
                 Dumper.Dump(response);
 
             }
+            Console.WriteLine("MQTT Client Created");
         }
 
         // get angle values from data
@@ -83,15 +94,15 @@ namespace Team_308_VirtualWarehouse
 
             for (int i = 0; i < payload.Length; i++)
             {
-                if (payload[i].ToString() + payload[i+1].ToString() == "x\"")
+                if (payload[i].ToString() + payload[i + 1].ToString() == "x\"")
                 {
                     result[0] = payload.Substring(i + 3, 9);
                 }
-                else if (payload[i].ToString() + payload[i+1].ToString() == "y\"")
+                else if (payload[i].ToString() + payload[i + 1].ToString() == "y\"")
                 {
                     result[1] = payload.Substring(i + 3, 9);
                 }
-                else if (payload[i].ToString() + payload[i+1].ToString() == "z\"")
+                else if (payload[i].ToString() + payload[i + 1].ToString() == "z\"")
                 {
                     result[2] = payload.Substring(i + 3, 9);
                     break;
@@ -104,21 +115,23 @@ namespace Team_308_VirtualWarehouse
         // x,y,z
         private string[] parsesApplicationMessage(string payload)
         {
+            Console.WriteLine("GETTING POSITION DATA IN PARSES APP FUNCTION");
             string[] result = new string[3];
 
             for (int i = 0; i < payload.Length - 1; i++)
             {
-                if (payload[i].ToString() + payload[i + 1].ToString() == "x_")
+                Console.WriteLine(payload.Substring(i, 1) + i);
+                if (payload.Substring(i, 1) == "x")
                 {
-                    result[0] = payload.Substring(i + 10, 8);
+                    result[0] = payload.Substring(i + 4, 8);
                 }
-                else if (payload[i].ToString() + payload[i + 1].ToString() == "y_")
+                else if (payload.Substring(i, 2) == "y")
                 {
-                    result[1] = payload.Substring(i + 10, 8);
+                    result[1] = payload.Substring(i + 4, 8);
                 }
-                else if (payload[i].ToString() + payload[i + 1].ToString() == "z_")
+                else if (payload.Substring(i, 2) == "z")
                 {
-                    result[2] = payload.Substring(i + 10, 8);
+                    result[2] = payload.Substring(i + 4, 8);
                     break;
                 }
             }
@@ -127,23 +140,23 @@ namespace Team_308_VirtualWarehouse
 
         //When the application receives a message from the MQTT broker, this function is executed
 
-       /* When the button is clicked, it starts the application.
-        It receives messages from the MQTT broker and prints the received message in the textbox.
+        /* When the button is clicked, it starts the application.
+         It receives messages from the MQTT broker and prints the received message in the textbox.
 
-        The function parses the received message to get the values of azimuth, elevation, and distance.
+         The function parses the received message to get the values of azimuth, elevation, and distance.
 
-        It then calls the parsesApplicationMessage method to get the values of x, y, and z.
-        
-        It writes these values to a CSV file using the CSVWriter class.
-        
-        Finally, it updates the text of textbox1, textbox2, and textbox3 with the
-        
-        values of azimuth, elevation, distance, x, y, and z respectively.*/
+         It then calls the parsesApplicationMessage method to get the values of x, y, and z.
+
+         It writes these values to a CSV file using the CSVWriter class.
+
+         Finally, it updates the text of textbox1, textbox2, and textbox3 with the
+
+         values of azimuth, elevation, distance, x, y, and z respectively.*/
         private Task handleReceivedApplicationMessage(MqttApplicationMessageReceivedEventArgs m)
         {
             // simply sets Textbox3 to a new string value
             this.BeginInvoke((MethodInvoker)delegate { this.Loft_TextBox.Text = "Received application message"; });
-            
+
             // m is the message recieved from the server and locator
             while (m != null)
             {
@@ -152,25 +165,25 @@ namespace Team_308_VirtualWarehouse
                   readable string using UTF-8 encoding and stores the resulting string in the variable "payload"*/
                 string payload = Encoding.UTF8.GetString(m.ApplicationMessage.Payload);
                 this.BeginInvoke((MethodInvoker)delegate { this.X_TextBox.Text = payload; });
-                string[] result = new string[3];
-                string[] result1 = new string[3];
-                result = parseApplicationMessage(payload);
-                result1 = parsesApplicationMessage(payload);
-                string azimuth = result[0];
-                string elevation = result[1];
-                string distance = result[2];
+                string[] angleValues = new string[3];
+                string[] positionValues = new string[3];
+                angleValues = parseApplicationMessage(payload);
+                positionValues = parsesApplicationMessage(payload);
+                string azimuth = angleValues[0];
+                string elevation = angleValues[1];
+                string distance = angleValues[2];
 
-                string x = result1[0];
-                string y = result1[1];
-                string z = result1[2];
+                string x = positionValues[0];
+                string y = positionValues[1];
+                string z = positionValues[2];
 
-                CSVWriter.writeToCSV(new Payload() { Time = DateTime.Now, Row = x, Column = y, Loft = z});
+                CSVWriter.writeToCSV(new Payload() { Time = DateTime.Now, Row = x, Column = y, Loft = z });
 
                 double temp1 = double.Parse(azimuth, CultureInfo.InvariantCulture.NumberFormat);
                 double temp2 = double.Parse(elevation, CultureInfo.InvariantCulture.NumberFormat);
 
-                this.BeginInvoke((MethodInvoker)delegate { this.Y_TextBox.Text = x; });
-                this.BeginInvoke((MethodInvoker)delegate { this.Loft_TextBox.Text = y; });
+                this.BeginInvoke((MethodInvoker)delegate { this.X_TextBox.Text = positionValues[0]; });
+                this.BeginInvoke((MethodInvoker)delegate { this.Y_TextBox.Text = y; });
                 float x1 = 1;
                 float y1 = 1;
 
@@ -192,36 +205,50 @@ namespace Team_308_VirtualWarehouse
                 //temp2 = (temp2 - 33);
 
                 Console.WriteLine(payload + " //// " + x + " //// " + y + " //// " + z);
+
                 // CHANGE THIS BACK THIS IS ONLY FOR SCREENSHOT
-                this.BeginInvoke((MethodInvoker)delegate { this.X_TextBox.Text = temp1.ToString(); });
+                /*this.BeginInvoke((MethodInvoker)delegate { this.X_TextBox.Text = temp1.ToString(); });
                 this.BeginInvoke((MethodInvoker)delegate { this.Y_TextBox.Text = temp2.ToString(); });
-                this.BeginInvoke((MethodInvoker)delegate { this.Loft_TextBox.Text = distance; });
+                this.BeginInvoke((MethodInvoker)delegate { this.Loft_TextBox.Text = distance; });*/
+
+                //x = "17"; y = "38"; 
+
+                //X_TextBox.Text = x;
+                //Y_TextBox.Text = y;
+
                 return Task.CompletedTask;
             }
             return Task.CompletedTask;
         }
 
-        private void ButtonChangeTextOnClick(object sender, EventArgs e)
+        private void LocationButton_Click(object sender, EventArgs e)
         {
             getData();
+            if (!configured)
+            {
+                gridmap.setOrigin();
+                location_button.Text = "Get Location";
+                configured = true;
+            }
+            else
+            {
+                // gridmap.drawMap(g);
+                GridMap.drawMap(g);
+                Console.WriteLine("END OF GET DATA FUNCTION");
+            }
         }
-
-        private void X_Label_Paint(object sender, PaintEventArgs e)
-        {
-            ControlPaint.DrawBorder(e.Graphics, X_Label.ClientRectangle,
-                Color.Red, ButtonBorderStyle.Solid);
-
-            // SetCircle(e.Graphics, x1, y1);
-        }
+        
 
         public (int x, int y) GetCoordinates()
         {
+            int num1 = int.Parse(result1[0]);
+            int num2 = int.Parse(result1[1]);
             if (result1 == null || result1.Length < 2)
             {
                 throw new InvalidOperationException("Coordinates not initialized or invalid.");
             }
 
-            return (result1[0], result1[1]);
+            return (num1, num2);
         }
     }
 }

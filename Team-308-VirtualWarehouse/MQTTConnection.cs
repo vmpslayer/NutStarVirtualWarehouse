@@ -78,7 +78,7 @@ static class MqttConfig
     public static readonly int Port = 1883;
 	public static readonly string User = "root";
 	public static readonly string Password = "12345";
-	public static readonly string Topic = "silabs/aoa/angle/ble-pd-4C5BB31129AD/ble-pd-040D84A65F85";
+	public static readonly string Topic = "silabs/aoa/position/multilocator-test_room/ble-pd-4C5BB3110C3D";
 	public static readonly string Topic2 = ""; 
 	public static readonly string Topic3 = "";
 };
