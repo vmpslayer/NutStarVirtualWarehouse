@@ -18,7 +18,8 @@ namespace Team_308_VirtualWarehouse
         Brush brush = new SolidBrush(Color.Red);
 
         // The data structure that will hold the real-world coordinates of the center of each grid.
-        private (int x, int y)[,] gridContents;
+        private (int x, int y)[,] gridContents = new (int x, int y)[gridSize, gridSize];
+        
         // grid name such as: 101, 102 is stored in here with corresponding index i and j
         private string[,] gridNames;
         private string resultGridName;
@@ -32,17 +33,16 @@ namespace Team_308_VirtualWarehouse
         private const int MaxCoordinates = 10;
         // average data container
         private List<(int x, int y)> coordinatesBuffer = new List<(int x, int y)>();
-
         private Form1 formInstance;
 
-
         public GridMap(Form1 form)
-        {   
+        {
             // ***** just added testing *****
             this.formInstance = form;
 
             // Initialize the gridContents with the fixed size of 5x5.
             gridContents = new (int x, int y)[gridSize, gridSize];
+            gridNames = new string[gridSize, gridSize];
 
             // Initialize all grid contents with their real-world coordinates.
             for (int i = 0; i < gridSize; i++)
@@ -63,6 +63,13 @@ namespace Team_308_VirtualWarehouse
             }
 
             originisSet = false;
+        }
+
+        public void OnPaint(object sender, PaintEventArgs e)
+        {
+            base.OnPaint(e);
+            Graphics g = e.Graphics;
+            drawMap(g);
         }
 
         // example set
@@ -207,7 +214,7 @@ namespace Team_308_VirtualWarehouse
                 }
             }
 
-            return "NULL";
+            return null;
         }
 
         public static void drawMap(Graphics g)
