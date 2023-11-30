@@ -35,8 +35,8 @@ namespace Team_308_VirtualWarehouse
         {     
             InitializeComponent();
 
+            // ***** just added testing *****
             getData();
-
             gridmap = new GridMap(this);
             
         }
@@ -213,6 +213,10 @@ namespace Team_308_VirtualWarehouse
                 string y = positionValues[1];
                 string z = positionValues[2];
 
+                result1[0] = x;
+                result1[1] = y;
+                result1[2] = z;
+
                 CSVWriter.writeToCSV(new Payload() { Time = DateTime.Now, Row = x, Column = y, Loft = z });
 
                 // double temp1 = double.Parse(azimuth, CultureInfo.InvariantCulture.NumberFormat);
@@ -285,6 +289,7 @@ namespace Team_308_VirtualWarehouse
 
         private void button2_Click(object sender, EventArgs e)
         {
+            //GridMap.PaintGridMap();
             gridmap.Show();
         }
 

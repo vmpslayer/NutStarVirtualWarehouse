@@ -115,6 +115,7 @@
     </Compile>
     <Compile Include="MQTTConnection.cs" />
     <None Include="packages.config" />
+    <None Include="GridMap.resx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

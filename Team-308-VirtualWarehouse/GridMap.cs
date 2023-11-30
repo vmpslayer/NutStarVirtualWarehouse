@@ -65,10 +65,11 @@ namespace Team_308_VirtualWarehouse
             originisSet = false;
         }
 
-        public void OnPaint(object sender, PaintEventArgs e)
+        public static void PaintGridMap()
         {
-            base.OnPaint(e);
-            Graphics g = e.Graphics;
+            Bitmap drawing = new Bitmap(height * gridScale, width * gridScale);
+            //base.OnPaint(e);
+            Graphics g = Graphics.FromImage(drawing);
             drawMap(g);
         }
 
