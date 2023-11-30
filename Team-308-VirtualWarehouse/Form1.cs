@@ -35,8 +35,10 @@ namespace Team_308_VirtualWarehouse
         {     
             InitializeComponent();
 
-            // ***** just added testing *****
+            getData();
+
             gridmap = new GridMap(this);
+            
         }
 
 
@@ -88,7 +90,7 @@ namespace Team_308_VirtualWarehouse
         // azimuth, elevation, distance
         private string[] parseApplicationMessage(string payload)
         {
-            string[] result = new string[3];
+            // string[] result = new string[3];
 
             for (int i = 0; i < payload.Length; i++)
             {
@@ -114,26 +116,59 @@ namespace Team_308_VirtualWarehouse
         private string[] parsesApplicationMessage(string payload)
         {
             Console.WriteLine("GETTING POSITION DATA IN PARSES APP FUNCTION");
-            string[] result = new string[3];
+            // string[] result = new string[3];
 
             for (int i = 0; i < payload.Length - 1; i++)
             {
                 Console.WriteLine(payload.Substring(i, 1) + i);
                 if (payload.Substring(i, 1) == "x")
                 {
-                    result[0] = payload.Substring(i + 4, 8);
+                    result1[0] = payload.Substring(i + 4, 8);
                 }
                 else if (payload.Substring(i, 2) == "y")
                 {
-                    result[1] = payload.Substring(i + 4, 8);
+                    result1[1] = payload.Substring(i + 4, 8);
                 }
                 else if (payload.Substring(i, 2) == "z")
                 {
-                    result[2] = payload.Substring(i + 4, 8);
+                    result1[2] = payload.Substring(i + 4, 8);
                     break;
                 }
             }
-            return result;
+            return result1;
+        }
+
+        private string[] getPosValues(string payload)
+        {
+            // string[] result = new string[3];
+            string temp = "";
+
+            for (int i = 0; i < payload.Length - 1; i++)
+            {
+                if (payload.Substring(i, 1) == "x")
+                {
+                    for (int j = i + 4; payload.Substring(j, 1) != "."; j++)
+                    {
+                        temp += payload.Substring(j, 1);
+                    }
+                    result1[0] = temp;
+                }
+                else if (payload.Substring(i, 1) == "y")
+                {
+                    for (int j = i + 4; payload.Substring(j, 1) != "."; j++)
+                    {
+                        temp += payload.Substring(j, 1);
+                    }
+                    result1[1] = temp;
+                }
+                else if (payload.Substring(i, 1) == "z")
+                {
+                    result1[2] = payload.Substring(i + 4, 8);
+                    break;
+                }
+                temp = "";
+            }
+            return result1;
         }
 
         //When the application receives a message from the MQTT broker, this function is executed
@@ -162,14 +197,17 @@ namespace Team_308_VirtualWarehouse
                 /*This line of code converts the payload (a byte array) received from the MQTT broker into a
                   readable string using UTF-8 encoding and stores the resulting string in the variable "payload"*/
                 string payload = Encoding.UTF8.GetString(m.ApplicationMessage.Payload);
-                this.BeginInvoke((MethodInvoker)delegate { this.X_TextBox.Text = payload; });
-                string[] angleValues = new string[3];
+                Console.WriteLine("******payload******: ");
+                // this.BeginInvoke((MethodInvoker)delegate { this.X_TextBox.Text = payload; });
+
+                // string[] angleValues = new string[3];
                 string[] positionValues = new string[3];
-                angleValues = parseApplicationMessage(payload);
-                positionValues = parsesApplicationMessage(payload);
-                string azimuth = angleValues[0];
-                string elevation = angleValues[1];
-                string distance = angleValues[2];
+                // angleValues = parseApplicationMessage(payload);
+                // positionValues = parsesApplicationMessage(payload);
+                positionValues = getPosValues(payload);
+                // string azimuth = angleValues[0];
+                // string elevation = angleValues[1];
+                // string distance = angleValues[2];
 
                 string x = positionValues[0];
                 string y = positionValues[1];
@@ -177,21 +215,22 @@ namespace Team_308_VirtualWarehouse
 
                 CSVWriter.writeToCSV(new Payload() { Time = DateTime.Now, Row = x, Column = y, Loft = z });
 
-                double temp1 = double.Parse(azimuth, CultureInfo.InvariantCulture.NumberFormat);
-                double temp2 = double.Parse(elevation, CultureInfo.InvariantCulture.NumberFormat);
+                // double temp1 = double.Parse(azimuth, CultureInfo.InvariantCulture.NumberFormat);
+                // double temp2 = double.Parse(elevation, CultureInfo.InvariantCulture.NumberFormat);
 
-                this.BeginInvoke((MethodInvoker)delegate { this.X_TextBox.Text = positionValues[0]; });
-                this.BeginInvoke((MethodInvoker)delegate { this.Y_TextBox.Text = y; });
-                float x1 = 1;
-                float y1 = 1;
+                
+                // float x1 = 1;
+                // float y1 = 1;
 
                 if (x != null)
                 {
-                    x1 = float.Parse(x, CultureInfo.InvariantCulture.NumberFormat);
+                    Console.WriteLine("******************* x: " + x);
+                    // x1 = float.Parse(x, CultureInfo.InvariantCulture.NumberFormat);
                 }
                 if (y != null)
                 {
-                    y1 = float.Parse(y, CultureInfo.InvariantCulture.NumberFormat);
+                    Console.WriteLine("******************* y: " + y);
+                    // y1 = float.Parse(y, CultureInfo.InvariantCulture.NumberFormat);
                 }
                 //8, 33      //-8, 35
                 //7.3, 33   //5, 35
@@ -204,10 +243,13 @@ namespace Team_308_VirtualWarehouse
 
                 Console.WriteLine(payload + " //// " + x + " //// " + y + " //// " + z);
 
-                // CHANGE THIS BACK THIS IS ONLY FOR SCREENSHOT
-                /*this.BeginInvoke((MethodInvoker)delegate { this.X_TextBox.Text = temp1.ToString(); });
-                this.BeginInvoke((MethodInvoker)delegate { this.Y_TextBox.Text = temp2.ToString(); });
-                this.BeginInvoke((MethodInvoker)delegate { this.Loft_TextBox.Text = distance; });*/
+                this.BeginInvoke((MethodInvoker)delegate { this.X_TextBox.Text = x; });
+                this.BeginInvoke((MethodInvoker)delegate { this.Y_TextBox.Text = y; });
+
+
+                // this.BeginInvoke((MethodInvoker)delegate { this.X_TextBox.Text = x1.ToString(); });
+                // this.BeginInvoke((MethodInvoker)delegate { this.Y_TextBox.Text = y1.ToString(); });
+                
 
                 //x = "17"; y = "38"; 
 
@@ -221,15 +263,22 @@ namespace Team_308_VirtualWarehouse
 
         private void LocationButton_Click(object sender, EventArgs e)
         {
-            getData();
+            // getData();
             if (!configured)
             {
                 gridmap.setOrigin();
-                location_button.Text = "Get Location";
+                // location_button.Text = "Get Location";
                 configured = true;
+
+                this.BeginInvoke((MethodInvoker)delegate { this.X_TextBox.Text = gridmap.getNormalizedX().ToString("0.000"); });
+                this.BeginInvoke((MethodInvoker)delegate { this.Y_TextBox.Text = gridmap.getNormalizedY().ToString("0.000"); });
+                this.BeginInvoke((MethodInvoker)delegate { this.Loft_TextBox.Text = gridmap.calculateGrid(); });
             }
             else
             {
+                this.BeginInvoke((MethodInvoker)delegate { this.X_TextBox.Text = gridmap.getNormalizedX().ToString("0.000"); });
+                this.BeginInvoke((MethodInvoker)delegate { this.Y_TextBox.Text = gridmap.getNormalizedY().ToString("0.000"); });
+                this.BeginInvoke((MethodInvoker)delegate { this.Loft_TextBox.Text = gridmap.calculateGrid(); });
                 Console.WriteLine("END OF GET DATA FUNCTION");
             }
         }
@@ -241,14 +290,23 @@ namespace Team_308_VirtualWarehouse
 
         public (int x, int y) GetCoordinates()
         {
-            int num1 = int.Parse(result1[0]);
-            int num2 = int.Parse(result1[1]);
+            getData();
             if (result1 == null || result1.Length < 2)
             {
                 throw new InvalidOperationException("Coordinates not initialized or invalid.");
             }
 
-            return (num1, num2);
+            result
+
+            // string[] positionValues = new string[3];
+
+            Console.WriteLine("***** result1[0]: " + result1[0]);
+            Console.WriteLine("***** result1[1]: " + result1[1]);
+
+            // int num1 = int.Parse(result1[0]);
+            // int num2 = int.Parse(result1[1]);
+
+            return (int.Parse(result1[0]), int.Parse(result1[1]));
         }
     }
 }

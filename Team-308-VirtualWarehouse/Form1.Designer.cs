@@ -64,7 +64,8 @@
             this.X_TextBox.ReadOnly = true;
             this.X_TextBox.Size = new System.Drawing.Size(196, 30);
             this.X_TextBox.TabIndex = 8;
-            this.X_TextBox.Text = "14.68";
+            // this.X_TextBox.Text = "14.68";
+            // this.X_TextBox.Text = gridmap.getNormalizedX().ToString("0.000");
             // 
             // Y_TextBox
             // 
@@ -76,7 +77,8 @@
             this.Y_TextBox.ReadOnly = true;
             this.Y_TextBox.Size = new System.Drawing.Size(196, 30);
             this.Y_TextBox.TabIndex = 9;
-            this.Y_TextBox.Text = "7.32";
+            // this.Y_TextBox.Text = "7.32";
+            // this.Y_TextBox.Text = gridmap.getNormalizedY().ToString("0.000");
             // 
             // Y_Label
             // 
@@ -104,7 +106,8 @@
             this.Loft_TextBox.ReadOnly = true;
             this.Loft_TextBox.Size = new System.Drawing.Size(196, 30);
             this.Loft_TextBox.TabIndex = 12;
-            this.Loft_TextBox.Text = "G3";
+            // this.Loft_TextBox.Text = "G3";
+            // this.Loft_TextBox.Text = gridmap.calculateGrid();
             // 
             // Loft_Label
             // 

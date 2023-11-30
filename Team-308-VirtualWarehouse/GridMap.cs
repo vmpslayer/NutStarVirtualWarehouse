@@ -123,7 +123,7 @@ namespace Team_308_VirtualWarehouse
         }
 
         // overloading with parser
-        public void GetCoordinates()
+        public void setCoordinates()
         {
             Form1 formInstance = new Form1();
             for (int i = 0; i < MaxCoordinates; i++)
@@ -160,6 +160,16 @@ namespace Team_308_VirtualWarehouse
             // return (normalizedX, normalizedY);
         }
 
+        public double getNormalizedX()
+        {
+            return normalizedX;
+        }
+
+        public double getNormalizedY()
+        {
+            return normalizedY;
+        }
+
         // Function to set the origin
         public void setOrigin()
         {
@@ -167,6 +177,7 @@ namespace Team_308_VirtualWarehouse
             // 'origin' holds the x, y, z values used for further calculations
             origin = formInstance.GetCoordinates();
             originisSet = true;
+            DisplayOrigin();
         }
 
         public void DisplayOrigin()
@@ -177,7 +188,7 @@ namespace Team_308_VirtualWarehouse
         // get current location difference than original location
         public (int x, int y) calculateLocationDifference()
         {
-            GetCoordinates();
+            setCoordinates();
             normalizeData();
 
             int diffX = (int)normalizedX - origin.x;
