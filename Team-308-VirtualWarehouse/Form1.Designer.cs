@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.button1 = new System.Windows.Forms.Button();
             this.X_TextBox = new System.Windows.Forms.TextBox();
             this.Y_TextBox = new System.Windows.Forms.TextBox();
@@ -36,18 +35,19 @@
             this.Loft_TextBox = new System.Windows.Forms.TextBox();
             this.Loft_Label = new System.Windows.Forms.Label();
             this.X_Label = new System.Windows.Forms.Label();
+            this.button2 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // location_button
+            // button1
             // 
             this.button1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(171)))), ((int)(((byte)(120)))), ((int)(((byte)(78)))));
             this.button1.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(171)))), ((int)(((byte)(120)))), ((int)(((byte)(78)))));
             this.button1.FlatAppearance.BorderSize = 0;
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.button1.Location = new System.Drawing.Point(230, 419);
+            this.button1.Location = new System.Drawing.Point(150, 418);
             this.button1.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
-            this.button1.Name = "location_button";
+            this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(150, 43);
             this.button1.TabIndex = 7;
             this.button1.Text = "Get Location";
@@ -62,10 +62,9 @@
             this.X_TextBox.Margin = new System.Windows.Forms.Padding(0);
             this.X_TextBox.Name = "X_TextBox";
             this.X_TextBox.ReadOnly = true;
-            this.X_TextBox.Size = new System.Drawing.Size(196, 53);
+            this.X_TextBox.Size = new System.Drawing.Size(196, 30);
             this.X_TextBox.TabIndex = 8;
             this.X_TextBox.Text = "14.68";
-            // this.X_TextBox.Layout += new System.Windows.Forms.LayoutEventHandler(this.textBox1_Layout);
             // 
             // Y_TextBox
             // 
@@ -75,7 +74,7 @@
             this.Y_TextBox.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
             this.Y_TextBox.Name = "Y_TextBox";
             this.Y_TextBox.ReadOnly = true;
-            this.Y_TextBox.Size = new System.Drawing.Size(196, 53);
+            this.Y_TextBox.Size = new System.Drawing.Size(196, 30);
             this.Y_TextBox.TabIndex = 9;
             this.Y_TextBox.Text = "7.32";
             // 
@@ -87,9 +86,9 @@
             this.Y_Label.CausesValidation = false;
             this.Y_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
             this.Y_Label.Location = new System.Drawing.Point(150, 225);
-            this.Y_Label.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.Y_Label.Margin = new System.Windows.Forms.Padding(5);
             this.Y_Label.Name = "Y_Label";
-            this.Y_Label.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.Y_Label.Padding = new System.Windows.Forms.Padding(5);
             this.Y_Label.Size = new System.Drawing.Size(60, 50);
             this.Y_Label.TabIndex = 11;
             this.Y_Label.Text = "Y";
@@ -103,7 +102,7 @@
             this.Loft_TextBox.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
             this.Loft_TextBox.Name = "Loft_TextBox";
             this.Loft_TextBox.ReadOnly = true;
-            this.Loft_TextBox.Size = new System.Drawing.Size(196, 53);
+            this.Loft_TextBox.Size = new System.Drawing.Size(196, 30);
             this.Loft_TextBox.TabIndex = 12;
             this.Loft_TextBox.Text = "G3";
             // 
@@ -115,14 +114,13 @@
             this.Loft_Label.CausesValidation = false;
             this.Loft_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
             this.Loft_Label.Location = new System.Drawing.Point(150, 300);
-            this.Loft_Label.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.Loft_Label.Margin = new System.Windows.Forms.Padding(5);
             this.Loft_Label.Name = "Loft_Label";
-            this.Loft_Label.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.Loft_Label.Padding = new System.Windows.Forms.Padding(5);
             this.Loft_Label.Size = new System.Drawing.Size(60, 50);
             this.Loft_Label.TabIndex = 13;
             this.Loft_Label.Text = "Loft";
             this.Loft_Label.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // this.Loft_Label.Click += new System.EventHandler(this.label3_Click);
             // 
             // X_Label
             // 
@@ -131,21 +129,33 @@
             this.X_Label.CausesValidation = false;
             this.X_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
             this.X_Label.Location = new System.Drawing.Point(150, 150);
-            this.X_Label.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.X_Label.Margin = new System.Windows.Forms.Padding(5);
             this.X_Label.Name = "X_Label";
-            this.X_Label.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.X_Label.Padding = new System.Windows.Forms.Padding(5);
             this.X_Label.Size = new System.Drawing.Size(60, 50);
             this.X_Label.TabIndex = 10;
             this.X_Label.Text = "X";
             this.X_Label.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // this.X_Label.Click += new System.EventHandler(this.label1_Click);
+            // 
+            // button2
+            // 
+            this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(171)))), ((int)(((byte)(120)))), ((int)(((byte)(78)))));
+            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button2.Location = new System.Drawing.Point(325, 418);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(150, 43);
+            this.button2.TabIndex = 14;
+            this.button2.Text = "Open GridMap";
+            this.button2.UseVisualStyleBackColor = false;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(169)))), ((int)(((byte)(108)))));
             this.ClientSize = new System.Drawing.Size(574, 529);
+            this.Controls.Add(this.button2);
             this.Controls.Add(this.Loft_Label);
             this.Controls.Add(this.Loft_TextBox);
             this.Controls.Add(this.Y_Label);
@@ -154,12 +164,10 @@
             this.Controls.Add(this.X_TextBox);
             this.Controls.Add(this.button1);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
-            // this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -175,6 +183,7 @@
         private System.Windows.Forms.Label Loft_Label;
         private System.Windows.Forms.Label X_Label;
         private System.Windows.Forms.TextBox X_TextBox;
+        private System.Windows.Forms.Button button2;
     }
 }
 

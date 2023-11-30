@@ -26,8 +26,6 @@ namespace Team_308_VirtualWarehouse
         string[] result = new string[3];
         string[] result1 = new string[3];
 
-        static Graphics g = null;
-
         // since form1 can be the only class object to be started with the application
         // and gridmap relies on form1 to work, gridmap would be instantiated inside of form1
         private GridMap gridmap;
@@ -232,12 +230,14 @@ namespace Team_308_VirtualWarehouse
             }
             else
             {
-                // gridmap.drawMap(g);
-                GridMap.drawMap(g);
                 Console.WriteLine("END OF GET DATA FUNCTION");
             }
         }
-        
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            gridmap.Show();
+        }
 
         public (int x, int y) GetCoordinates()
         {
