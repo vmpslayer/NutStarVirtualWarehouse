@@ -50,7 +50,7 @@ public class MQTTConnection
 
 			var response = await mqttClient.SubscribeAsync(mqttSubscribeOptions, CancellationToken.None);
 
-			Console.WriteLine("MQTT client subscribed.");
+			//Console.WriteLine("MQTT client subscribed.");
 
 			//response.DumpToConsole();
 			Dumper.Dump(response);
@@ -65,7 +65,7 @@ public class MQTTConnection
 
 		await this.mqttClient.DisconnectAsync(mqttClientDisconnectOptions, CancellationToken.None);
 
-		Console.WriteLine("Disconnect Successful");
+		//Console.WriteLine("Disconnect Successful");
 	}
 };
 
@@ -73,14 +73,13 @@ public class MQTTConnection
 
 static class MqttConfig
 {
-	// Later implementation for multiple topics/tags maybe..
     public static readonly string Server = "192.168.1.2";
     public static readonly int Port = 1883;
 	public static readonly string User = "root";
 	public static readonly string Password = "12345";
+	//Tag Variable
 	public static readonly string Topic = "silabs/aoa/position/multilocator-test_room/ble-pd-4C5BB3110C3D";
-	public static readonly string Topic2 = ""; 
-	public static readonly string Topic3 = "";
+	//public static readonly string Topic = "";
 };
 
 public static class Dumper
