@@ -201,7 +201,12 @@ namespace Team_308_VirtualWarehouse
 
         private void MapButtonClick(object sender, EventArgs e)
         {
+            if(gridmap == null || gridmap.IsDisposed)
+            {
+                gridmap = new GridMap();
+            }
             gridmap.Show();
+            gridmap.BringToFront();
         }
 
         // get angle values from data

@@ -14,11 +14,14 @@ namespace Team_308_VirtualWarehouse
         private const int gridSize = 5;
         private const int width = gridSize;
         private const int height = gridSize;
-        private const int gridScale = 1; // Each grid is 2x2 feet
-        
+        private const int gridScale = 2; // Each grid is 2x2 feet
+        private const int mapScale = 30;
 
-        Brush brush = new SolidBrush(Color.Red);
-        static Bitmap drawing;
+        static private readonly int mapWidth = (GridMap.width * gridScale) * mapScale;
+        static private readonly int mapHeight = (GridMap.height * gridScale) * mapScale;
+
+        private readonly int windowWidth = ((GridMap.width * gridScale) * mapScale) + 25;
+        private readonly int windowHeight = ((GridMap.height * gridScale) * mapScale) + 45;        
 
         // The data structure that will hold the real-world coordinates of the center of each grid.
         private (int x, int y)[,] gridContents = new (int x, int y)[gridSize, gridSize];
@@ -33,6 +36,9 @@ namespace Team_308_VirtualWarehouse
 
         bool originisSet;
 
+        // Classification for height (z)
+        char resultChar;
+
         private const int MaxCoordinates = 10;
         // average data container
         private List<(int x, int y)> coordinatesBuffer = new List<(int x, int y)>();
@@ -43,8 +49,20 @@ namespace Team_308_VirtualWarehouse
         public GridMap(Form1 form)
         {
             // ***** just added testing *****
+            Size newSize;
+            if (windowWidth > 1920 || windowHeight > 1080)
+            {
+                 newSize = new Size(800, 800);
+            }
+            else
+            {
+                newSize = new Size(windowWidth, windowHeight);
+            }
+            this.Size = newSize;
+
             this.formInstance = form;
-            drawing = new Bitmap(height * gridScale, width * gridScale);
+            redPen = new Pen(Color.Red)
+
             this.Paint += PaintGridMap;
             // PaintGridMap();
 
@@ -78,6 +96,7 @@ namespace Team_308_VirtualWarehouse
             //Graphics g = Graphics.FromImage(drawing);
             Graphics g = e.Graphics;
             drawMap(g);
+            SetCircle(g);
         }
 
         // example set
@@ -98,36 +117,6 @@ namespace Team_308_VirtualWarehouse
                 throw new ArgumentOutOfRangeException("Coordinates are out of range.");
             }
             return gridContents[i, j];
-        }
-
-        // paint circle depending on x, y
-        public void SetCircle(Graphics g, int x, int y)
-        {
-            // NOTE: On use in Form1.cs, Do this:
-            // System.Drawing.Graphics formGraphics;
-            // formGraphics = this.CreateGraphics();
-            int radius = 10;
-
-            if (brush != null)
-            {
-                brush.Dispose();
-                SetCircle(g, x, y);
-            }
-            else
-            {
-                // previous:
-                // System.Drawing.Drawing2D.GraphicsPath map = new System.Drawing.Drawing2D.GraphicsPath();
-                // map.AddEllipse(100, 15, 100, 70);
-                // System.Drawing.Region r = new System.Drawing.Region(map);
-                // Graphics gr = e.Graphics;
-                // gr.FillRegion(Brushes.Red, r);
-
-                // base.OnPaint(e)
-                // using var myPen = new Pen(Color.Red);
-                // var area = new Rectangle(new Point(x, y), new Size(1, 1))
-                // e.Graphics.DrawRectangle(myPen, area);
-                g.FillEllipse(brush, new Rectangle(x, y, 2 * radius, 2 * radius));
-            }
         }
 
         // overloading with parser
@@ -236,58 +225,99 @@ namespace Team_308_VirtualWarehouse
 
         }
 
+        // classify height algorithm v1 -- skeleton and untested.
+        public char classifyHeight(string height)
+        {
+            double heightNum = double.Parse(height);
+            int letterIndex = (int)Math.Floor(heightNum / 2);
+            if(heightNum < 0)
+            {
+                Console.WriteLine("Height cannot be a negative number.");
+            }
+            if(letterIndex > ('Z' - 'A'))
+            {
+                return 'Z';
+            }
+
+            resultChar = (char)('A' + letterIndex);
+            
+            return resultChar;
+        }
+
+        // paint circle depending on x, y
+        public void SetCircle(Graphics g)
+        {
+            Random random = new Random();
+
+            int xrandom = random.Next(1, 6);
+            int yrandom = random.Next(1, 6);
+            Console.WriteLine("x rand: " + xrandom + "      y rand: " + yrandom);
+
+            int Xpos = (xrandom * (mapScale * gridScale)) - ((mapScale * gridScale) / 2);
+            int Ypos = (yrandom * (mapScale * gridScale)) - ((mapScale * gridScale) / 2);
+
+            Console.WriteLine("x pos: " + Xpos + "      y pos: " + Ypos);
+
+            SolidBrush redBrush = new SolidBrush(Color.Red);
+
+            if (redBrush != null)
+            {
+                // draws position
+                g.FillEllipse(redBrush, Xpos, Ypos, 15, 15);
+            }
+        }
+
         public static void drawMap(Graphics g)
         {
-            if (initialOpenGridMap == true && g != null)
+
+            int width = mapWidth; // (5*2) = 10 * 30 = 300
+            int height = mapHeight; // (5*2) = 10 * 30 = 300
+            // 300x300 width and height (BY DEFAULT)
+
+
+            Pen pen = new Pen(Color.Black);
+
+            //// Left Side
+            //PointF point1 = new PointF(0, height);
+            //PointF point2 = new PointF(0, 0);
+            //g.DrawLine(pen, point1, point2);
+
+            // Top
+            PointF point1 = new PointF(0, 0);
+            PointF point2 = new PointF(width, 0);
+            g.DrawLine(pen, point1, point2);
+
+            //// Right Side
+            point1 = new PointF(width, height);
+            point2 = new PointF(height, 0);
+            g.DrawLine(pen, point1, point2);
+
+            // Bottom
+            point1 = new PointF(width, height);
+            point2 = new PointF(0, height);
+            g.DrawLine(pen, point1, point2);
+
+            for (int i = 0; i < width; i++)
             {
-                g.Dispose();
-                drawMap(g);
-            }
-            else
-            {
-                int width = (GridMap.width * gridScale);
-                int height = (GridMap.height * gridScale);
-                int widthScale = width * 10;
-                int heightScale = height * 10;
-                int gridscaleScale = GridMap.gridScale * 10;
-
-                Pen pen = new Pen(Color.Black);
-
-                //// Left Side
-                //PointF point1 = new PointF(0, height);
-                //PointF point2 = new PointF(0, 0);
-                //g.DrawLine(pen, point1, point2);
-
-                // Top
-                PointF topleft = new PointF(0, 0);
-                PointF topright = new PointF(width, 0);
-
-                // Bottom
-                PointF bottomleft = new PointF(width, height);
-                PointF bottomright = new PointF(height, 0);
-
-                g.DrawLine(pen, topleft, topright);
-                g.DrawLine(pen, bottomleft, bottomright);
-
-                //// Right Side
-                //point1 = new (width, 0);
-                //point2 = new (width, height);
-                //g.DrawLine(pen, point1, point2);
-
-                for (int i = 0; i < widthScale; i++)
+                for (int j = 0; j < height; j++)
                 {
-                    if(i % gridscaleScale == 0)
-                        g.DrawLine(pen, i, 0, i, height);
-                    
-                }
-                for(int j = 0; j < heightScale; j++)
-                {
-                    if(j % gridscaleScale == 0)
-                        g.DrawLine(pen, 0, j, width, j);
-                }
-                initialOpenGridMap = true;
+                    if (i % (GridMap.gridScale * mapScale) == 0)
+                    {
+                        point1 = new PointF(i, 0);
+                        point2 = new PointF(i, height);
+                        g.DrawLine(pen, point1, point2);
 
+                    }
+                    if (j % (GridMap.gridScale * mapScale) == 0)
+                    {
+                        point1 = new PointF(0, j);
+                        point2 = new PointF(width, j);
+                        g.DrawLine(pen, point1, point2);
+
+                    }
+                }
             }
+            
         }
     }
 
